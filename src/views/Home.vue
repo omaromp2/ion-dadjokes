@@ -2,28 +2,39 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>DadJokes</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
+          <ion-title size="large">Dad Jokes</ion-title>
         </ion-toolbar>
       </ion-header>
     
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <h3> {{ joke }} </h3>
+        <br>
+        <br>
+        <ion-button color="primary" @click="getJoke()" >
+          <ion-icon name="chat" ></ion-icon> Tell me a Joke
+        </ion-button>
+        <ion-button color="danger" @click="clear()"  >
+          <ion-icon name="trash" ></ion-icon> clear
+        </ion-button>
+
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonIcon } from '@ionic/vue';
+import { addIcons } from 'ionicons';
+import { trashBinOutline, chatbubbleOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
@@ -32,8 +43,48 @@ export default defineComponent({
     IonHeader,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar, 
+    IonIcon
+  }, 
+
+  created(){
+    addIcons({
+      'trash': trashBinOutline,
+      'chat': chatbubbleOutline
+    });
+  },
+
+  data() {
+    return {
+      joke: ''
+    }
+  }, 
+  methods:{
+    getJoke(){
+
+      // const header = {'accept': 'application/json'}; 
+
+      axios.get('https://icanhazdadjoke.com/',{
+        headers:{
+          'accept': 'application/json'
+        }
+      })
+      .then(resp => {
+        // console.log(resp);
+
+        this.joke = resp.data.joke;
+        
+      })
+      .catch(err => {
+        console.log(err);
+        
+      });
+    }, 
+    clear(){
+      this.joke = '';
+    }
   }
+
 });
 </script>
 
