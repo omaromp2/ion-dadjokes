@@ -10,6 +10,7 @@
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Dad Jokes</ion-title>
+          
         </ion-toolbar>
       </ion-header>
     
@@ -23,15 +24,13 @@
         <ion-button color="danger" @click="clear()"  >
           <ion-icon name="trash" ></ion-icon> clear
         </ion-button> -->
+        <!-- <ion-icon name="trash" ></ion-icon> -->
 
-        <ion-icon name="trash" ></ion-icon>
-        <ion-icon name="trash" ></ion-icon>
-
-        <ion-button color="primary" @click="getJoke()" >
+        <!-- <ion-button color="primary" @click="getJoke()" >
           <ion-icon name="chat" ></ion-icon> Tell me a Joke
-        </ion-button>
+        </ion-button> -->
 
-        <div v-if="jokes == null">
+        <div v-if="jokes.length == 0">
           No Jokes at the moment. Please pull my finger
         </div>
 
@@ -53,13 +52,23 @@
 
       </div>
     </ion-content>
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+          <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="bottom">
+            <ion-fab-button @click="getJoke()" ><ion-icon name="chat"></ion-icon></ion-fab-button>
+            <ion-fab-button @click="clear()" ><ion-icon name="trash"></ion-icon></ion-fab-button>
+          </ion-fab-list>
+        </ion-fab>
   </ion-page>
 </template>
 
 <script >
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonIcon, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonIcon, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonFab, 
+  IonFabButton, IonFabList } from '@ionic/vue';
 import { addIcons } from 'ionicons';
-import { trashBinOutline, chatbubbleOutline } from 'ionicons/icons';
+import { trashBinOutline, chatbubbleOutline, addCircleOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
 import axios from 'axios';
 
@@ -75,14 +84,19 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonCardSubtitle,
-    IonCardTitle
+    IonCardTitle, 
+    IonFab, 
+    IonFabButton, 
+    IonFabList
   }, 
 
   created(){
     addIcons({
       'trash': trashBinOutline,
-      'chat': chatbubbleOutline
+      'chat': chatbubbleOutline,
+      'add' : addCircleOutline
     });
+    this.getJoke();
   },
 
   data() {
