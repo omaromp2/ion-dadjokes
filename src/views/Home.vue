@@ -14,7 +14,7 @@
       </ion-header>
     
       <div id="container">
-        <h3> {{ joke }} </h3>
+        <!-- <h3> {{ joke }} </h3>
         <br>
         <br>
         <ion-button color="primary" @click="getJoke()" >
@@ -22,15 +22,42 @@
         </ion-button>
         <ion-button color="danger" @click="clear()"  >
           <ion-icon name="trash" ></ion-icon> clear
+        </ion-button> -->
+
+        <ion-icon name="trash" ></ion-icon>
+        <ion-icon name="trash" ></ion-icon>
+
+        <ion-button color="primary" @click="getJoke()" >
+          <ion-icon name="chat" ></ion-icon> Tell me a Joke
         </ion-button>
+
+        <div v-if="jokes == null">
+          No Jokes at the moment. Please pull my finger
+        </div>
+
+        <div v-else>
+          <!-- {{ jokes[0].joke }} -->
+
+          <ion-card v-for="joke in jokes" :key="joke" >
+            <ion-card-header>
+              <ion-card-title>DadJokes</ion-card-title>
+              <ion-card-subtitle>This is your joke</ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+              {{joke.joke}}
+            </ion-card-content>
+          </ion-card>
+
+        </div>
 
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonIcon } from '@ionic/vue';
+<script >
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonIcon, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle } from '@ionic/vue';
 import { addIcons } from 'ionicons';
 import { trashBinOutline, chatbubbleOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
@@ -44,7 +71,11 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar, 
-    IonIcon
+    IonIcon, 
+    IonCard,
+    IonCardContent,
+    IonCardSubtitle,
+    IonCardTitle
   }, 
 
   created(){
@@ -56,7 +87,8 @@ export default defineComponent({
 
   data() {
     return {
-      joke: ''
+      // joke: ''
+      jokes:[]
     }
   }, 
   methods:{
@@ -72,7 +104,12 @@ export default defineComponent({
       .then(resp => {
         // console.log(resp);
 
-        this.joke = resp.data.joke;
+        // this.joke = resp.data.joke;
+
+        // const joke = JSON.parse(resp.data); 
+        
+        this.jokes.push(resp.data); 
+
         
       })
       .catch(err => {
@@ -81,7 +118,8 @@ export default defineComponent({
       });
     }, 
     clear(){
-      this.joke = '';
+      // this.joke = '';
+      this.jokes = []; 
     }
   }
 
